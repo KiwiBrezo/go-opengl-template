@@ -19,7 +19,7 @@ func NewWindow(width int32, height int32) *Window {
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
-	window, err := glfw.CreateWindow(int(width), int(height), "Go 3D Tiles Viewer", nil, nil)
+	window, err := glfw.CreateWindow(int(width), int(height), "Go OpenGL", nil, nil)
 	if err != nil {
 		panic(err)
 	}
