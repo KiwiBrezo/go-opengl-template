@@ -1,0 +1,8 @@
+#Bin files
+bin
+
+#Dev files
+.idea
+
+#Go files
+go.sum
