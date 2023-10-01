@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 	"github.com/go-gl/gl/v4.1-core/gl"
-	"go-3d-tiles-viewer/io"
+	"go-open-gl/io"
 	"log"
 	"strings"
 )

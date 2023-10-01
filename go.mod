@@ -1,4 +1,4 @@
-module go-3d-tiles-viewer
+module go-open-gl
 
 go 1.21
 

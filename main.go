@@ -3,26 +3,16 @@ package main
 import (
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
-	"go-3d-tiles-viewer/core"
+	"go-open-gl/core"
+	"go-open-gl/models"
+	"go-open-gl/models/shapes"
 	"log"
 	"runtime"
 )
 
 var (
-	width  = 800
-	height = 600
-
-	vertices = []float32{
-		0.5, 0.5, 0.0, // top right
-		0.5, -0.5, 0.0, // bottom right
-		-0.5, -0.5, 0.0, // bottom left
-		-0.5, 0.5, 0.0, // top left
-	}
-
-	indices = []uint32{
-		0, 1, 3, // first triangle
-		1, 2, 3, // second triangle
-	}
+	windowWidth  = 800
+	windowHeight = 600
 )
 
 func initOpenGL(width int32, height int32) {
@@ -43,24 +33,31 @@ func initOpenGL(width int32, height int32) {
 func main() {
 	runtime.LockOSThread()
 
-	mainWindow := core.NewWindow(int32(width), int32(height))
+	mainWindow := core.NewWindow(int32(windowWidth), int32(windowHeight))
 	defer glfw.Terminate()
 
-	initOpenGL(int32(width), int32(height))
+	initOpenGL(int32(windowWidth), int32(windowHeight))
 
 	program, err := core.MakeShaderProgram("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl")
 	if err != nil {
 		panic(err)
 	}
 
-	vbo := core.MakeVbo(vertices)
-	ebo := core.MakeEbo(indices)
-	vao := core.MakeVao(vbo, ebo)
+	shapeList := []shapes.Shape2D{
+		shapes.NewCirclePositioned(models.Vec3{X: -0.3, Y: 0.3, Z: 0.0}, 0.1, 64),
+		shapes.NewRectanglePositioned(models.Vec3{X: 0.5, Y: -1.0, Z: 0.0}, 0.5, 0.5),
+	}
 
 	// For development
-	//gl.PolygonMode(gl.FRONT_AND_BACK, gl.LINE)
+	// gl.PolygonMode(gl.FRONT_AND_BACK, gl.LINE)
 
 	for !mainWindow.Window.ShouldClose() {
-		core.Render(mainWindow.Window, program, vao)
+		core.Render(mainWindow.Window, program, shapeList)
+	}
+
+	log.Println("Disposing programs and buffers")
+	gl.DeleteProgram(program)
+	for _, shape := range shapeList {
+		shape.Dispose()
 	}
 }
